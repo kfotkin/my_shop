@@ -3,10 +3,11 @@
     {% for link in menu_links %}
     <li>
         <a href="{% url link.url %}"
-           {% if request.resolver_match.url_name == link.url %}
-           class="active"
+            {% if request.resolver_match.url_name == link.url %}
+            class="active"
             {% endif %}>
-            {{ link.name}}</a>
+            {{ link.name }}
+        </a>
     </li>
     {% endfor %}
     {% if user.is_authenticated %}
