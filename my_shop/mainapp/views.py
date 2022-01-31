@@ -6,8 +6,7 @@ from .models import ProductCategory
 MENU_LINKS = [
     {"url": "main", "name": "домой"},
     {"url": "contact", "name": "контакты"},
-    {"url": "products", "name": "продукты"},
-    # {"url": "products:all", "name": "продукты"},
+    {"url": "products:all", "name": "продукты"},
 ]
 
 
@@ -17,7 +16,11 @@ def index(request):
     return render(
         request,
         "mainapp/index.html",
-        context={"title": "Главная", "menu_links": MENU_LINKS, "products": products},
+        context={
+            "title": "Главная",
+            "menu_links": MENU_LINKS, 
+            "products": products
+            },
     )
 
 
@@ -35,18 +38,6 @@ def contact(request):
 def products(request):
     categories = ProductCategory.objects.all()
     products = Product.objects.all()
-    # products = [
-    #     {
-    #         "name": "стул",
-    #         "description": "базовый стул",
-    #         "image": "mainapp/img/product-11.jpg",
-    #     },
-    #     {
-    #         "name": "стул2",
-    #         "description": "базовый стул2",
-    #         "image": "mainapp/img/product-21.jpg",
-    #     },
-    # ]
     return render(
         request,
         "mainapp/products.html",
