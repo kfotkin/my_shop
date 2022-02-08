@@ -1,11 +1,32 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from authapp.models import ShopUser
+from adminapp.utils import superuser_required
+from adminapp.forms import ShopUserAdminForm
+from django.http.response import HttpResponseRedirect
+from django.urls import reverse
 
 
+@superuser_required
 def user_create(request):
-    pass
+    if request.method == "POST":
+        edit_form = ShopUserAdminForm(request.POST, request.FILES)    
+        if edit_form.is_valid():
+            edit_form.save()
+            return HttpResponseRedirect(reverse('admin:users'))
+    else:
+        edit_form = ShopUserAdminForm()
+
+    return render(
+        request,
+        "adminapp/user/edit.html",
+        context={
+            "title": "Создание пользователя",
+            "form": edit_form,
+    },
+)
 
 
+@superuser_required
 def users(request):
     users = ShopUser.objects.all().order_by('id')
 
@@ -15,10 +36,41 @@ def users(request):
     })
 
 
+@superuser_required
+def user_update(request, pk):
+    user = get_object_or_404(ShopUser, pk=pk)
+    if request.method == "POST":
+        edit_form = ShopUserAdminForm(request.POST, request.FILES, instance=user)    
+        if edit_form.is_valid():
+            edit_form.save()
+            return HttpResponseRedirect(reverse('admin:users'))
+    else:
+        edit_form = ShopUserAdminForm(instance=user)
 
-def user_update(request):
-    pass
+    return render(
+        request,
+        "adminapp/user/edit.html",
+        context={
+            "title": "Редактирование пользователя",
+            "form": edit_form,
+    },
+)
 
 
+@superuser_required
 def user_delete(request, pk):
-    pass
+    title = 'Удаление пользователя'
+    
+    user = get_object_or_404(ShopUser, pk=pk)
+    
+    if request.method == 'POST':
+        #user.delete()
+        #вместо удаления лучше сделаем неактивным
+        user.is_active = False
+        user.save()
+        return HttpResponseRedirect(reverse('admin:users'))
+
+    content = {'title': title, 'user_to_delete': user}
+    
+    return render(request, 'adminapp/user/delete.html', content)
+
