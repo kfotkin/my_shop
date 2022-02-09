@@ -15,7 +15,26 @@
             {{ user.first_name|default:'Пользователь' }}          
         </a>
     </li>
+<<<<<<< Updated upstream
     {% endif %}  
+=======
+    {% endif %} 
+    {% if user.is_superuser %}
+    <li>
+        <a href="{% url 'admin:users' %}">
+            Админка         
+        </a>
+    </li>
+    {% endif %} 
+    {% if user.is_authenticated %}
+    <li>
+        <a href="{% url 'basket:view' %}">
+            корзина
+            {{ user.basket.total_cost }} ({{ user.basket.total_quantity }})
+        </a>
+    </li>
+    {% endif %}
+>>>>>>> Stashed changes
     <li>
         {% if user.is_authenticated %}
             <a href="{% url 'auth:logout' %}">выйти</a>
