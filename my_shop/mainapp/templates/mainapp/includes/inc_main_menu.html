@@ -3,10 +3,11 @@
     {% for link in menu_links %}
     <li>
         <a href="{% url link.url %}"
-           {% if request.resolver_match.url_name == link.url %}
-           class="active"
+            {% if request.resolver_match.url_name == link.url %}
+            class="active"
             {% endif %}>
-            {{ link.name}}</a>
+            {{ link.name }}
+        </a>
     </li>
     {% endfor %}
     {% if user.is_authenticated %}
@@ -15,9 +16,6 @@
             {{ user.first_name|default:'Пользователь' }}          
         </a>
     </li>
-<<<<<<< Updated upstream
-    {% endif %}  
-=======
     {% endif %} 
     {% if user.is_superuser %}
     <li>
@@ -34,14 +32,14 @@
         </a>
     </li>
     {% endif %}
->>>>>>> Stashed changes
     <li>
         {% if user.is_authenticated %}
-            <a href="{% url 'auth:logout' %}">выйти</a>
+        <a href="{% url 'auth:logout' %}">выйти</a>
         {% else %}
-            <a href="{% url 'auth:login' %}">войти</a>
+        <a href="{% url 'auth:login' %}">войти</a>
         {% endif %}
     </li>
+
 
 </ul>
 <a href="#" class="search"></a>
