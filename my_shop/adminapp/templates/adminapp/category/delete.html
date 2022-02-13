@@ -12,7 +12,7 @@
       {% endif %})
     {% endif %} {% endcomment %}
     ?
-    <form action="{% url 'admin:category_delete' category_to_delete.pk %}"
+    <form action="{% url 'admin:object' object.pk %}"
           method="post">
       {% csrf_token %}
       <input class="btn btn-danger" type="submit" value="удалить">

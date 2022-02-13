@@ -3,6 +3,7 @@ from django.http.request import HttpRequest
 from .models import Product
 from .models import ProductCategory
 import random
+from django.core.paginator import Paginator, EmptyPage
 
 MENU_LINKS = [
     {"url": "main", "name": "домой"},
@@ -73,19 +74,29 @@ def products(request):
     )
 
 
-def category(request, category_id):
+def category(request, category_id, page=1):
     categories = ProductCategory.objects.all()
     category = get_object_or_404(ProductCategory, pk=category_id)
     products = Product.objects.filter(category=category)
+    hot_product = get_hot_product(products)
+    paginator = Paginator(products.exclude(pk=hot_product.pk), 3)
+    try:
+        products_page = paginator.page(page)
+    except EmptyPage:
+        products_page = paginator.page(paginator.num_pages)
+
     return render(
         request,
         "mainapp/products.html",
         context={
             "title": "Продукты",
             "menu_links": MENU_LINKS,
-            "products": products,
+            "paginator": paginator,
+            "page": products_page,
+            "products": products_page,
             "categories": categories,
             "hot_product": get_hot_product(products),
             "category": category,
+            "hot_product": get_hot_product(products),
         },
     )

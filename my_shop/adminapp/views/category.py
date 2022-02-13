@@ -5,6 +5,8 @@ from adminapp.utils import superuser_required
 from adminapp.forms import ProductCategotyAdminForm
 from django.http.response import HttpResponseRedirect
 from django.urls import reverse
+from django.views.generic.edit import DeleteView
+from django.urls import reverse, reverse_lazy
 
 
 @superuser_required
@@ -75,3 +77,20 @@ def category_delete(request, pk):
     content = {'title': title, 'category_to_delete': category}
     
     return render(request, 'adminapp/category/delete.html', content)
+
+# class ProductCategoryDeleteView(DeleteView):
+#     model = ProductCategory
+#     template_name = 'adminapp/category/delete.html'
+#     success_url = reverse_lazy('admin:categories')
+    
+#     def delete(self, request, *args, **kwargs):
+#         success_url = self.get_success_url()
+#         self.object = self.get_object()
+#         self.object.is_active = False
+#         self.object.save()
+#         return HttpResponseRedirect(success_url)
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['title'] = 'Удаление категории'
+#         return context
