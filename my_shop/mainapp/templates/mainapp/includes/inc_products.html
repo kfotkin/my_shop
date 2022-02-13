@@ -4,7 +4,7 @@
     {% endif %}
         Страница {{ page.number }} из {{ paginator.num_pages }}
     {% if page.has_next %}
-        Туда
+        <a href="{% url 'products:paged_category' category.id page.next_page_number %}"> Туда </a>
     {% endif %}
 {% endif %}
 {% for product in products %}

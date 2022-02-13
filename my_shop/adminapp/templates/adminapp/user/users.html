@@ -8,6 +8,15 @@
             новый пользователь
         </a>
     </button>
+
+    {% if page_obj.has_previous %}
+       <a href="#"> Сюда </a>
+    {% endif %}
+        Страница {{ page.number }} из {{ paginator.num_pages }}
+    {% if page_obj.has_next %}
+        <a href="#"> Туда </a>
+    {% endif %}
+
     страница {{paginator.page_number}} из {{ paginator.num_pages }}
     {% for object in object_list %}
     <div 
