@@ -66,6 +66,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "mainapp.context_processors.menu_links",
             ],
         },
     },
@@ -137,4 +138,12 @@ MEDIA_ROOT = BASE_DIR / "media"
 # Auth
 AUTH_USER_MODEL = "authapp.ShopUser"
 
-LOGIN_URL = '/auth/login/'
+LOGIN_URL = 'auth:login'
+
+DOMAIN_NAME = 'localhost'
+
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = '25'
+EMAIL_HOST_USER = 'admin@localhost'
+EMAIL_HOST_PASSWORD = 'admin'
+EMAIL_USE_SSL = False
