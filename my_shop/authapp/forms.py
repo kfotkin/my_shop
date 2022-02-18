@@ -41,7 +41,7 @@ class ShopUserRegisterForm(UserCreationForm):
     def save(self):
         user = super().save()
         user.is_active = False
-        user.activation_key = hashlib.md5(user.email.encode('utf-8') + os.urandom(16)).hexdigest
+        user.activation_key = hashlib.md5(user.email.encode('utf-8') + os.urandom(16)).hexdigest()
         user.save()
         return user
 
