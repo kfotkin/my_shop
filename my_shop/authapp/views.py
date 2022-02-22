@@ -1,9 +1,14 @@
 from django.shortcuts import get_object_or_404, render, HttpResponseRedirect
-from .forms import ShopUserLoginForm, ShopUserRegisterForm, ShopUserEditForm
+from .forms import (
+    ShopUserLoginForm, 
+    ShopUserRegisterForm, 
+    ShopUserEditForm,
+    ShopUserProfileEditForm)
 from django.urls import reverse
 from django.contrib import auth
 from .utils import send_verify_mail
 from .models import ShopUser
+from django.db import transaction
 
 # Create your views here.
 
@@ -56,15 +61,18 @@ def register(request):
     )
 
 
-
+@transaction.atomic
 def edit(request):
     if request.method == "POST":
-        edit_form = ShopUserEditForm(request.POST, request.FILES)    
-        if edit_form.is_valid():
+        edit_form = ShopUserEditForm(request.POST, request.FILES) 
+        profile_form = ShopUserProfileEditForm(request.POST, instance=request.user.profile)   
+        if edit_form.is_valid() and profile_form.is_valid():
             edit_form.save()
+            profile_form.save()
             return HttpResponseRedirect(reverse('main'))
     else:
         edit_form = ShopUserEditForm(instance=request.user)
+        profile_form = ShopUserProfileEditForm(instance=request.user.profile)
 
     return render(
         request,
@@ -72,6 +80,7 @@ def edit(request):
         context={
             "title": "Редактирование",
             "form": edit_form,
+            "profile_form": profile_form,
         },
     )
 
@@ -81,6 +90,6 @@ def verify(request, email, activation_key):
     if user.activation_key == activation_key:
         user.is_active = True
         user.save()
-        auth.login(request, user)
+        auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         return render(request, 'authapp/verification.html')
         

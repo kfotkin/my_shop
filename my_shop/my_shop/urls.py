@@ -22,6 +22,7 @@ from mainapp import views as mainapp
 
 urlpatterns = [
     # path("admin/", admin.site.urls),
+    path('', include('social_django.urls', namespace="social")),
     path("admin/", include("adminapp.urls", namespace="admin")),
     path("", mainapp.index, name='main'),
     path("contact/", mainapp.contact, name="contact"),

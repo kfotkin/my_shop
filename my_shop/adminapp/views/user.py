@@ -12,7 +12,7 @@ from django.utils.decorators import method_decorator
 class UserListView(ListView):
     model = ShopUser
     template_name = 'adminapp/user/users.html'
-    paginate_by = 1
+    paginate_by = 5
 
     @method_decorator(superuser_required)
     def dispatch(self, request, *args, **kwargs):
