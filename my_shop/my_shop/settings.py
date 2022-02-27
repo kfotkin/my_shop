@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "authapp",
     "basketapp",
     "adminapp",
+    "ordersapp",
 
     "social_django",
 
@@ -163,7 +164,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
-    'authapp.pipeline.get_user_location'
+    'authapp.pipeline.get_user_location',
 )
 
 with open("./credentials.json", 'r') as credentials_file:
