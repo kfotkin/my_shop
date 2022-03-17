@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+import json
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -33,6 +33,12 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     "mainapp",
     "authapp",
+    "basketapp",
+    "adminapp",
+    "ordersapp",
+
+    "social_django",
+
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -49,6 +55,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "social_django.middleware.SocialAuthExceptionMiddleware",
 ]
 
 ROOT_URLCONF = "my_shop.urls"
@@ -64,6 +71,9 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "mainapp.context_processors.menu_links",
+                "social_django.context_processors.backends",
+                "social_django.context_processors.login_redirect",
             ],
         },
     },
@@ -134,3 +144,38 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 # Auth
 AUTH_USER_MODEL = "authapp.ShopUser"
+
+LOGIN_URL = 'auth:login'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.github.GithubOAuth2',
+]
+
+SOCIAL_AUTH_GITHUB_OAUTH2 = ['user', ]
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+    'authapp.pipeline.get_user_location',
+)
+
+with open("./credentials.json", 'r') as credentials_file:
+    credentials = json.load(credentials_file)
+    SOCIAL_AUTH_GITHUB_KEY = credentials['GITHUB_KEY']
+    SOCIAL_AUTH_GITHUB_SECRET = credentials['GITHUB_SECRET']
+
+DOMAIN_NAME = 'localhost'
+
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = '25'
+EMAIL_HOST_USER = 'admin@localhost'
+EMAIL_HOST_PASSWORD = 'admin'
+EMAIL_USE_SSL = False

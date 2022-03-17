@@ -3,26 +3,66 @@
     {% for link in menu_links %}
     <li>
         <a href="{% url link.url %}"
-           {% if request.resolver_match.url_name == link.url %}
-           class="active"
+            {% if request.resolver_match.url_name == link.url %}
+            class="active"
             {% endif %}>
-            {{ link.name}}</a>
-    </li>
-    {% endfor %}
-    {% if user.is_authenticated %}
-    <li>
-        <a href="{% url 'auth:edit' %}">
-            {{ user.first_name|default:'Пользователь' }}          
+            {{ link.name }}
         </a>
     </li>
-    {% endif %}  
+    {% endfor %}
+
+{% if user.is_authenticated %}
+    <li>
+        <div class="dropdown">
+            <a class="dropdown-toggle" href="" data-toggle="dropdown">
+                {{ user.first_name | default:'Юзер' }}
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="{% url 'auth:edit' %}">
+                        профиль
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'ordersapp:orders_list' %}">
+                        заказы
+                    </a>
+                </li>
+            </ul>
+     </div>
+    </li>
+{% endif %}
+
+{% if user.is_superuser %}
+   <li>
+       <a href="{% url 'admin:users' %}">админка</a>
+   </li>
+{% endif %}
+
+
+    {% if user.is_authenticated %}
+
+    {% endif %} 
+    {% if user.is_superuser %}
+
+    {% endif %} 
+    {% if user.is_authenticated %}
+    <li>
+        <a href="{% url 'basket:view' %}">
+            корзина
+            {{ user.basket.total_cost }} ({{ user.basket.total_quantity }})
+        </a>
+    </li>
+    {% endif %}
     <li>
         {% if user.is_authenticated %}
-            <a href="{% url 'auth:logout' %}">выйти</a>
+        <a href="{% url 'auth:logout' %}">выйти</a>
         {% else %}
-            <a href="{% url 'auth:login' %}">войти</a>
+        <a href="{% url 'auth:login' %}">войти</a>
         {% endif %}
     </li>
+
 
 </ul>
 <a href="#" class="search"></a>

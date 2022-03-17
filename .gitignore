@@ -124,3 +124,5 @@ Pyre type checker
 
 .idea
 venv
+credentials.json
+my_shop/credentials.json

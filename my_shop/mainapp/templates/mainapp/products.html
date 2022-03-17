@@ -12,20 +12,14 @@
 
 {% block content %}
 <div class="details">
-	<div class="links clearfix">
-		<ul class="links-menu">
-			{% for category in categories %}
-			<li><a href="#" class="active">{{ category.name }}</a></li>
-			{% endfor %}
-		</ul>
-	</div>
-
+	{% include 'mainapp/includes/inc_categories_menu.html' %}
+	{% if hot_product %}
 	<div class="details-products">
 		<div class="details-slider">
 			<div class="slider-product">
-				<img src="/static/mainapp/img/slider1.jpg">
+				<img src="{{ hot_product.image.url}}">
 			</div>
-			<div class="slider-control">
+			{% comment %} <div class="slider-control">
 				<div class="block">
 					<a href="#"><img src="/static/mainapp/img/controll.jpg" alt="">
 						<div class="text"></div>
@@ -41,46 +35,29 @@
 						<div class="text"></div>
 					</a>
 				</div>
-			</div>
+			</div> {% endcomment %}
 		</div>
 
 		<div class="description">
-			<h3 class="big-bold">Отличный стул</h3>
+			<h3 class="big-bold">{{ hot_product.name }}</h3>
 			<h3 class="red">горячее предложение</h3>
-			<p class="price"> 2585.9 <span>руб</span></p>
-			<a href="#" class="red-button">
+			<p class="price"> {{ hot_product.price }} <span>руб</span></p>
+			<a href="{% url 'basket:add' hot_product.id %}" class="red-button">
 				заказать <i class="fa fa-chevron-right" aria-hidden="true"></i>
 			</a>
 			<div class="description-text">
-				<p>Расположитесь комфортно.</p>
-				<p>Отличное качество материалов
-				позволит вам это.</p>
-				<p>Различные цвета</p>
-				<p>высочайший уровень
-				эргономики и прочность.</p>
+				{{ hot_product.description|linebreaks }}
 			</div>
 		</div>
 	</div>
-
+	{% endif %}
 	<div class="related">
 		<div class="title clearfix">
 			<h2>Похожие продукты</h2>
 			<a class="explore" href="#">показать все <img src="/static/mainapp/img/arrow.png" alt=""></a>
 		</div>
 		<div class="related-products clearfix">
-			{% for product in products %}
-			<div class="block">
-				<a href="#"><img src="{% static product.image %}" alt="">
-					<div class="text">
-						<img src="/static/mainapp/img/icon-hover.png" alt="img">
-						<h4>{{same_product.name}}</h4>
-						<p>{{product.description}} </p>
-					</div>
-				</a>
-			</div>
-			{% endfor %}
-			
-
+			{% include 'mainapp/includes/inc_products.html' %}
 		</div>
 	</div>
 </div>
